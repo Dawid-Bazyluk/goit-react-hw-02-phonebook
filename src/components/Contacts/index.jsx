@@ -9,6 +9,7 @@ export default class Contacts extends Component {
       contacts: [],
       name: "",
       number: "",
+      filter: "",
     };
   }
 
@@ -35,6 +36,7 @@ export default class Contacts extends Component {
   render() {
     const nameId = nanoid();
     const numId = nanoid();
+    const searchId = nanoid();
     return (
       <>
         <form className={styles.form} onSubmit={this.handleSubmit}>
@@ -63,12 +65,26 @@ export default class Contacts extends Component {
           <button type="submit">Add contact</button>
         </form>
         <h1>Contacts</h1>
+        <label htmlFor={searchId}>Find contact</label>
+        <input
+          type="text"
+          id={searchId}
+          value={this.state.filter}
+          onChange={this.handleChange}
+          name="filter"
+        />
         <ul className={styles.list}>
-          {this.state.contacts.map((contact) => (
-            <li key={contact.id}>
-              {contact.name} - {contact.number}
-            </li>
-          ))}
+          {this.state.contacts
+            .filter((el) =>
+              el.name
+                .toLowerCase()
+                .includes(this.state.filter.toLocaleLowerCase()),
+            )
+            .map((contact) => (
+              <li key={contact.id}>
+                {contact.name} - {contact.number}
+              </li>
+            ))}
         </ul>
       </>
     );
